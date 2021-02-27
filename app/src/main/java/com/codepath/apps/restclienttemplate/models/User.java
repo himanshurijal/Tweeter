@@ -2,12 +2,17 @@ package com.codepath.apps.restclienttemplate.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 // Represents the person associated with each tweet
+@Parcel
 public class User {
     protected String name;
     protected String screenName;
     protected String publicImageUrl;
+
+    // Empty constructor needed for Parceler
+    public User() { }
 
     public User(String name, String screenName, String publicImageUrl) {
         this.name = name;

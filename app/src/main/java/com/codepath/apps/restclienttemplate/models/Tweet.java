@@ -5,15 +5,19 @@ import com.codepath.apps.restclienttemplate.TimeFormatter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-// Represents each Tweet
+@Parcel
 public class Tweet {
     protected User user;
     protected String text;
     protected String createdAt;
+
+    // Empty constructor needed for Parceler
+    public Tweet() { }
 
     public Tweet(User user, String text, String createdAt) {
         this.user = user;
@@ -21,20 +25,22 @@ public class Tweet {
         this.createdAt = createdAt;
     }
 
-    public static List<Tweet> getListOfTweets(JSONArray jsonArray) throws JSONException {
+    public static List<Tweet> getListOfTweetsFromJsonArray(JSONArray jsonArray) throws JSONException {
         List<Tweet> listOfTweets = new ArrayList<>();
 
         for(int i = 0; i < jsonArray.length(); i++) {
             JSONObject tweetJsonObject = jsonArray.getJSONObject(i);
-
-            User user = User.getUserFromJsonObject(tweetJsonObject.getJSONObject("user"));
-            String text = tweetJsonObject.getString("text");
-            String createdAt = tweetJsonObject.getString("created_at");
-
-            listOfTweets.add(new Tweet(user, text, createdAt));
+            listOfTweets.add(Tweet.getTweetFromJsonObject(tweetJsonObject));
         }
 
         return listOfTweets;
+    }
+
+    public static Tweet getTweetFromJsonObject(JSONObject jsonObject) throws JSONException {
+        User user = User.getUserFromJsonObject(jsonObject.getJSONObject("user"));
+        String text = jsonObject.getString("text");
+        String createdAt = jsonObject.getString("created_at");
+        return new Tweet(user, text, createdAt);
     }
 
     public String getTimeDifference() {
